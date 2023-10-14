@@ -10,6 +10,11 @@ namespace LocalidadesAPI.Repositories
         public IBGERepository(IConfiguration configuration)
             : base(configuration) { }
 
+        public async Task Excluir(string codigo)
+        {
+            await CustomRepository.DeleteAsync(codigo);   
+        }
+
         public async Task<IBGE> ObterPorCodigo(string codigo)
         {
             var parametros = new Dictionary<string, object>()

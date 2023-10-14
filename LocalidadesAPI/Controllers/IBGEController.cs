@@ -58,5 +58,14 @@ namespace LocalidadesAPI.Controllers
 
             return StatusCode(200, localidade);
         }
+
+        [HttpDelete]
+        [Route("/Localidade")]
+        public async Task<IActionResult> ExcluirLocalidade(string codigo)
+        {
+            await _IBGERepository.Excluir(codigo);
+
+            return StatusCode(200);
+        }
     }
 }
