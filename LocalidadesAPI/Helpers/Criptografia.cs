@@ -57,5 +57,15 @@ namespace LocalidadesAPI.Security
                 }
             }
         }
+
+        public static string GerarHash(string texto)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] inputBytes = Encoding.UTF8.GetBytes(texto);
+                byte[] hashBytes = sha256.ComputeHash(inputBytes);
+                return Convert.ToBase64String(hashBytes);
+            }
+        }
     }
 }
