@@ -20,7 +20,7 @@ namespace LocalidadesAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Cadastrar")]
+        [Route("Cadastrar")]
         public async Task<IActionResult> Cadastrar(string email, string senha)
         {
             if (!ValidacaoHelper.ValidarEmail(email) || !ValidacaoHelper.ValidarSenha(senha))
@@ -46,7 +46,7 @@ namespace LocalidadesAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Login")]
+        [Route("Login")]
         public async Task<IActionResult> Login(string email, string senha)
         {
             if (!ValidacaoHelper.ValidarEmail(email) || !ValidacaoHelper.ValidarSenha(senha))
