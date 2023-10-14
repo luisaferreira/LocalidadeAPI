@@ -23,5 +23,17 @@ namespace LocalidadesAPI.Helpers
 
             return true;
         }
+
+        public static bool ValidarCodigoIBGE(string codigo)
+        {
+            return !string.IsNullOrEmpty(codigo) 
+                && Regex.IsMatch(codigo, "^[0-9]{7}$");
+        }
+
+        public static bool ValidarSiglaEstado(string siglaEstado)
+        {
+            return !string.IsNullOrEmpty(siglaEstado) 
+                && Regex.IsMatch(siglaEstado, "^[A-Z]{2}$");
+        }
     }
 }
