@@ -14,7 +14,7 @@ namespace LocalidadesAPI.Repositories.Base
             CustomRepository = new CustomRepository<T>(Context.Connection);
         }
 
-        public async Task<int> Inserir(T entity) =>
+        public virtual async Task<int> Inserir(T entity) =>
             (int)(await CustomRepository.InsertAsync(entity, false));
 
         public async Task<T> ObterPorId(int id) =>

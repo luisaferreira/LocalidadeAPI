@@ -1,5 +1,7 @@
-﻿using LocalidadesAPI.Security;
+﻿using LocalidadesAPI.Mappings;
+using LocalidadesAPI.Security;
 using RepositoryHelpers.DataBase;
+using RepositoryHelpers.Mapping;
 
 namespace LocalidadesAPI.Repositories.Base
 {
@@ -15,6 +17,15 @@ namespace LocalidadesAPI.Repositories.Base
                 ConnectionString = Criptografia.Descriptografar(configuration.GetSection("ConnectionStrings:LocalidadeAPI").Value,
                         configuration.GetSection("ChaveCriptografia").Value)
             };
+            InicializarMaps();
+        }
+
+        private void InicializarMaps()
+        {
+            Mapper.Initialize(c =>
+            {
+                c.AddMap(new UsuarioMap());
+            });
         }
     }
 }

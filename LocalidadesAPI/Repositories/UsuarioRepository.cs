@@ -10,6 +10,9 @@ namespace LocalidadesAPI.Repositories
         public UsuarioRepository(IConfiguration configuration) 
             : base(configuration) { }
 
+        public override async Task<int> Inserir(Usuario usuario) =>
+            (int)(await CustomRepository.InsertAsync(usuario, true));
+
         public async Task<Usuario> ObterUsuarioPorEmail(string email)
         {
             var parametros = new Dictionary<string, object>()
