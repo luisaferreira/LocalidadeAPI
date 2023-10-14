@@ -37,5 +37,14 @@ namespace LocalidadesAPI.Controllers
 
             return StatusCode(201, "Localidade adicionada com sucesso!");
         }
+
+        [HttpGet]
+        [Route("/Localidade")]
+        public async Task<IActionResult> ObterLocalidade()
+        {
+            var localidades = await _IBGERepository.Obter();
+
+            return StatusCode(200, localidades);
+        }
     }
 }
