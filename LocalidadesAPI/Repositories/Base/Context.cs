@@ -22,10 +22,14 @@ namespace LocalidadesAPI.Repositories.Base
 
         private void InicializarMaps()
         {
-            Mapper.Initialize(c =>
+            if (Mapper.IsEmptyMapping())
             {
-                c.AddMap(new UsuarioMap());
-            });
+                Mapper.Initialize(c =>
+                            {
+                                c.AddMap(new UsuarioMap());
+                            });
+            }
+
         }
     }
 }
