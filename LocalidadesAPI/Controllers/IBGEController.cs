@@ -46,5 +46,17 @@ namespace LocalidadesAPI.Controllers
 
             return StatusCode(200, localidades);
         }
+
+        [HttpGet]
+        [Route("/Localidade/{codigoIBGE}")]
+        public async Task<IActionResult> ObterLocalidadePorCodigoIBGE(string codigoIBGE)
+        {
+            if (!ValidacaoHelper.ValidarCodigoIBGE(codigoIBGE))
+                return BadRequest("O código IBGE é inválido!");
+
+            var localidade = await _IBGERepository.ObterPorCodigo(codigoIBGE);
+
+            return StatusCode(200, localidade);
+        }
     }
 }
