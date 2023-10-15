@@ -40,6 +40,7 @@ namespace LocalidadesAPI.Controllers
         }
 
         [HttpGet]
+        [Route("ObterLocalidades")]
         public async Task<IActionResult> ObterLocalidades()
         {
             var localidades = await _IBGERepository.Obter();
@@ -48,7 +49,7 @@ namespace LocalidadesAPI.Controllers
         }
 
         [HttpGet]
-        [Route("{codigoIBGE}")]
+        [Route("ObterLocalidadePorCodigoIBGE/{codigoIBGE}")]
         public async Task<IActionResult> ObterLocalidadePorCodigoIBGE(string codigoIBGE)
         {
             if (!ValidacaoHelper.ValidarCodigoIBGE(codigoIBGE))
@@ -60,6 +61,7 @@ namespace LocalidadesAPI.Controllers
         }
 
         [HttpDelete]
+        [Route("ExcluirLocalidade/{codigo}")]
         public async Task<IActionResult> ExcluirLocalidade(string codigo)
         {
             if (!ValidacaoHelper.ValidarCodigoIBGE(codigo))
@@ -76,6 +78,7 @@ namespace LocalidadesAPI.Controllers
         }
 
         [HttpPut]
+        [Route("AtualizarLocalidade")]
         public async Task<IActionResult> AtualizarLocalidade(IBGE ibge)
         {
             if (ibge == null)
@@ -92,6 +95,18 @@ namespace LocalidadesAPI.Controllers
             await _IBGERepository.Atualizar(ibge);
 
             return Ok("Localidade atualizada!");
+        }
+
+        [HttpGet]
+        [Route("Pesquisar/{pesquisa}")]
+        public async Task<IActionResult> Pesquisar(string pesquisa)
+        {
+            if (string.IsNullOrEmpty(pesquisa))
+                return BadRequest("Índice de pesquisa vazio!");
+
+            var localidades = await _IBGERepository.Pesquisar(pesquisa);
+
+            return Ok(localidades);
         }
     }
 }
