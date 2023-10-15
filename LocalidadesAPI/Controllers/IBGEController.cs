@@ -62,6 +62,14 @@ namespace LocalidadesAPI.Controllers
         [HttpDelete]
         public async Task<IActionResult> ExcluirLocalidade(string codigo)
         {
+            if (!ValidacaoHelper.ValidarCodigoIBGE(codigo))
+                return BadRequest("O código IBGE é inválido!");
+
+            var localidade = await _IBGERepository.ObterPorId(codigo);
+
+            if (localidade == null)
+                return NotFound("Não existe nenhuma localidade vinculada à esse código IBGE!");
+
             await _IBGERepository.Excluir(codigo);
 
             return StatusCode(200, "Localidade excluída!");
