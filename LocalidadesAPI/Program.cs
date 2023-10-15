@@ -1,4 +1,4 @@
-using LocalidadesAPI.Interfaces.Repositories;
+using LocalidadesAPI.Interfaces.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -35,7 +35,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddScoped<ITokenHandler, LocalidadesAPI.Repositories.TokenHandler>();
+builder.Services.AddScoped<ITokenHandler, LocalidadesAPI.Security.TokenHandler>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => 

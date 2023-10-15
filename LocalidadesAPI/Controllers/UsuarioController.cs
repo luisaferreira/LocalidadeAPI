@@ -2,6 +2,7 @@
 using LocalidadesAPI.Models;
 using LocalidadesAPI.Repositories;
 using LocalidadesAPI.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LocalidadesAPI.Controllers
@@ -21,6 +22,7 @@ namespace LocalidadesAPI.Controllers
 
         [HttpPost]
         [Route("Cadastrar")]
+        [AllowAnonymous]
         public async Task<IActionResult> Cadastrar(string email, string senha)
         {
             if (!ValidacaoHelper.ValidarEmail(email) || !ValidacaoHelper.ValidarSenha(senha))
@@ -47,6 +49,7 @@ namespace LocalidadesAPI.Controllers
 
         [HttpPost]
         [Route("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(string email, string senha)
         {
             if (!ValidacaoHelper.ValidarEmail(email) || !ValidacaoHelper.ValidarSenha(senha))
