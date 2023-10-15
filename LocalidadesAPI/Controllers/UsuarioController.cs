@@ -1,6 +1,6 @@
 ﻿using LocalidadesAPI.Helpers;
+using LocalidadesAPI.Interfaces.Repositories;
 using LocalidadesAPI.Models;
-using LocalidadesAPI.Repositories;
 using LocalidadesAPI.Security;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +10,11 @@ namespace LocalidadesAPI.Controllers
     [Route("/Usuario")]
     public class UsuarioController : ControllerBase
     {
-        private readonly UsuarioRepository _usuarioRepository;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public UsuarioController(IConfiguration configuration)
+        public UsuarioController(IUsuarioRepository usuarioRepository)
         {
-            _usuarioRepository = new UsuarioRepository(configuration);
+            _usuarioRepository = usuarioRepository;
         }
 
         [HttpPost]

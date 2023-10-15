@@ -1,6 +1,6 @@
 ﻿using LocalidadesAPI.Helpers;
+using LocalidadesAPI.Interfaces.Repositories;
 using LocalidadesAPI.Models;
-using LocalidadesAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LocalidadesAPI.Controllers
@@ -9,11 +9,11 @@ namespace LocalidadesAPI.Controllers
     [Route("[controller]")]
     public class IBGEController : Controller
     {
-        private readonly IBGERepository _IBGERepository;
+        private readonly IIBGERepository _IBGERepository;
 
-        public IBGEController(IConfiguration configuration)
+        public IBGEController(IIBGERepository ibgeRepository)
         {
-            _IBGERepository = new IBGERepository(configuration);
+            _IBGERepository = ibgeRepository;
         }
 
         [HttpPost]

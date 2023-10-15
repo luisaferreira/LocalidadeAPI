@@ -7,12 +7,16 @@ namespace LocalidadesAPI.Repositories.Base
     {
         protected readonly Context Context;
         protected readonly CustomRepository<T> CustomRepository;
+        private bool _disposed = false;
 
         public BaseRepository(IConfiguration configuration)
         {
             Context = new Context(configuration);
             CustomRepository = new CustomRepository<T>(Context.Connection);
         }
+
+        ~BaseRepository() =>
+            Dispose();
 
         public virtual async Task<object> Inserir(T entity, bool identity) =>
             await CustomRepository.InsertAsync(entity, identity);
@@ -31,7 +35,11 @@ namespace LocalidadesAPI.Repositories.Base
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            if (!_disposed)
+            {
+                CustomRepository.DisposeDB(true);
+                _disposed = true;
+            }
         }
     }
 }
