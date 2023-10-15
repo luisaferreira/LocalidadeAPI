@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LocalidadesAPI.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class IBGEController : Controller
     {
         private readonly IBGERepository _IBGERepository;
@@ -16,7 +17,7 @@ namespace LocalidadesAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Localidade/Adicionar")]
+        [Route("Adicionar")]
         public async Task<IActionResult> AdicionarLocalidade(IBGE ibge)
         {
             if (ibge == null)
@@ -39,7 +40,6 @@ namespace LocalidadesAPI.Controllers
         }
 
         [HttpGet]
-        [Route("/Localidade")]
         public async Task<IActionResult> ObterLocalidade()
         {
             var localidades = await _IBGERepository.Obter();
@@ -48,7 +48,7 @@ namespace LocalidadesAPI.Controllers
         }
 
         [HttpGet]
-        [Route("/Localidade/{codigoIBGE}")]
+        [Route("{codigoIBGE}")]
         public async Task<IActionResult> ObterLocalidadePorCodigoIBGE(string codigoIBGE)
         {
             if (!ValidacaoHelper.ValidarCodigoIBGE(codigoIBGE))
@@ -60,12 +60,30 @@ namespace LocalidadesAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("/Localidade")]
         public async Task<IActionResult> ExcluirLocalidade(string codigo)
         {
             await _IBGERepository.Excluir(codigo);
 
             return StatusCode(200);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> AtualizarLocalidade(IBGE ibge)
+        {
+            if (ibge == null)
+                return BadRequest("Objeto não pode ser nulo!");
+
+            if (!ValidacaoHelper.ValidarCodigoIBGE(ibge.Codigo) || !ValidacaoHelper.ValidarSiglaEstado(ibge.Estado) || string.IsNullOrEmpty(ibge.Cidade))
+                return BadRequest("Informações inválidas!");
+
+            var localidadeExiste = await _IBGERepository.ObterPorCodigo(ibge.Codigo);
+
+            if (localidadeExiste == null)
+                return NotFound("Não existe nenhuma localidade vinculada à esse código IBGE!");
+
+            await _IBGERepository.Atualizar(ibge);
+
+            return Ok("Localidade atualizada!");
         }
     }
 }
