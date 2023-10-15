@@ -26,7 +26,7 @@ namespace LocalidadesAPI.Controllers
             if (!ValidacaoHelper.ValidarCodigoIBGE(ibge.Codigo) || !ValidacaoHelper.ValidarSiglaEstado(ibge.Estado) || string.IsNullOrEmpty(ibge.Cidade))
                 return BadRequest("Informações inválidas!");
 
-            var localidadeExiste = await _IBGERepository.ObterPorCodigo(ibge.Codigo);
+            var localidadeExiste = await _IBGERepository.ObterPorId(ibge.Codigo);
 
             if (localidadeExiste != null)
                 return BadRequest("Já existe uma localidade vinculada à esse código IBGE!");
@@ -40,7 +40,7 @@ namespace LocalidadesAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ObterLocalidade()
+        public async Task<IActionResult> ObterLocalidades()
         {
             var localidades = await _IBGERepository.Obter();
 
@@ -64,7 +64,7 @@ namespace LocalidadesAPI.Controllers
         {
             await _IBGERepository.Excluir(codigo);
 
-            return StatusCode(200);
+            return StatusCode(200, "Localidade excluída!");
         }
 
         [HttpPut]
@@ -76,7 +76,7 @@ namespace LocalidadesAPI.Controllers
             if (!ValidacaoHelper.ValidarCodigoIBGE(ibge.Codigo) || !ValidacaoHelper.ValidarSiglaEstado(ibge.Estado) || string.IsNullOrEmpty(ibge.Cidade))
                 return BadRequest("Informações inválidas!");
 
-            var localidadeExiste = await _IBGERepository.ObterPorCodigo(ibge.Codigo);
+            var localidadeExiste = await _IBGERepository.ObterPorId(ibge.Codigo);
 
             if (localidadeExiste == null)
                 return NotFound("Não existe nenhuma localidade vinculada à esse código IBGE!");
