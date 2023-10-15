@@ -7,6 +7,7 @@ namespace LocalidadesAPI.Repositories.Base
     {
         protected readonly Context Context;
         protected readonly CustomRepository<T> CustomRepository;
+        private bool _disposed = false;
 
         public BaseRepository(IConfiguration configuration)
         {
@@ -14,16 +15,19 @@ namespace LocalidadesAPI.Repositories.Base
             CustomRepository = new CustomRepository<T>(Context.Connection);
         }
 
-        public virtual async Task<int> Inserir(T entity) =>
-            (int)(await CustomRepository.InsertAsync(entity, false));
+        ~BaseRepository() =>
+            Dispose();
 
-        public async Task<T> ObterPorId(int id) =>
+        public virtual async Task<object> Inserir(T entity, bool identity) =>
+            await CustomRepository.InsertAsync(entity, identity);
+
+        public async Task<T> ObterPorId(object id) =>
            await CustomRepository.GetByIdAsync(id);
 
         public async Task<IEnumerable<T>> Obter() =>
             await CustomRepository.GetAsync();
 
-        public async Task Excluir(int id) =>
+        public async Task Excluir(object id) =>
             await CustomRepository.DeleteAsync(id);
 
         public async Task Atualizar(T entity) =>
@@ -31,7 +35,11 @@ namespace LocalidadesAPI.Repositories.Base
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            if (!_disposed)
+            {
+                CustomRepository.DisposeDB(true);
+                _disposed = true;
+            }
         }
     }
 }

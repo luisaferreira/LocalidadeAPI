@@ -1,6 +1,6 @@
 ﻿using LocalidadesAPI.Helpers;
+using LocalidadesAPI.Interfaces.Repositories;
 using LocalidadesAPI.Models;
-using LocalidadesAPI.Repositories;
 using LocalidadesAPI.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +11,12 @@ namespace LocalidadesAPI.Controllers
     [Route("[controller]")]
     public class UsuarioController : ControllerBase
     {
-        private readonly UsuarioRepository _usuarioRepository;
+        private readonly IUsuarioRepository _usuarioRepository;
         private readonly TokenHandler _tokenHandler;
 
-        public UsuarioController(IConfiguration configuration)
+        public UsuarioController(IConfiguration configuration, IUsuarioRepository usuarioRepository)
         {
-            _usuarioRepository = new UsuarioRepository(configuration);
+            _usuarioRepository = usuarioRepository;
             _tokenHandler = new TokenHandler(configuration);
         }
 
@@ -39,7 +39,7 @@ namespace LocalidadesAPI.Controllers
                 Senha = Criptografia.GerarHash(senha)
             };
 
-            var retorno = await _usuarioRepository.Inserir(usuario);
+            var retorno = (int) await _usuarioRepository.Inserir(usuario, true);
 
             if (retorno == 0)
                 return StatusCode(500, "Erro ao cadastrar usuário!");

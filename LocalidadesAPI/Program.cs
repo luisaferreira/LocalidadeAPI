@@ -1,3 +1,4 @@
+using LocalidadesAPI.IoC;
 using LocalidadesAPI.Interfaces.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -11,12 +12,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.RegisterStaticDependencies();
 builder.Services.AddSwaggerGen(options =>
 {
     var securityScheme = new OpenApiSecurityScheme
     {
-        Name = "AutenticaÁ„o JWT",
-        Description = "Insira um token JWT v·lido.",
+        Name = "Autentica√ß√£o JWT",
+        Description = "Insira um token JWT v√°lido.",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",

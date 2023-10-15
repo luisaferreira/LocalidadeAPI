@@ -27,6 +27,7 @@ namespace LocalidadesAPI.Repositories.Base
                 Mapper.Initialize(c =>
                             {
                                 c.AddMap(new UsuarioMap());
+                                c.AddMap(new IBGEMap());
                             });
             }
 
