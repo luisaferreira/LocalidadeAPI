@@ -2,23 +2,27 @@
 using LocalidadesAPI.Interfaces.Repositories;
 using LocalidadesAPI.Models;
 using LocalidadesAPI.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LocalidadesAPI.Controllers
 {
     [ApiController]
-    [Route("/Usuario")]
+    [Route("[controller]")]
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly TokenHandler _tokenHandler;
 
-        public UsuarioController(IUsuarioRepository usuarioRepository)
+        public UsuarioController(IConfiguration configuration, IUsuarioRepository usuarioRepository)
         {
             _usuarioRepository = usuarioRepository;
+            _tokenHandler = new TokenHandler(configuration);
         }
 
         [HttpPost]
-        [Route("/Usuario/Cadastrar")]
+        [Route("Cadastrar")]
+        [AllowAnonymous]
         public async Task<IActionResult> Cadastrar(string email, string senha)
         {
             if (!ValidacaoHelper.ValidarEmail(email) || !ValidacaoHelper.ValidarSenha(senha))
@@ -44,19 +48,23 @@ namespace LocalidadesAPI.Controllers
         }
 
         [HttpPost]
-        [Route("/Usuario/Login")]
+        [Route("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(string email, string senha)
         {
             if (!ValidacaoHelper.ValidarEmail(email) || !ValidacaoHelper.ValidarSenha(senha))
                 return BadRequest("E-mail e/ou senha inválido!");
 
-            var usuarioExiste = await _usuarioRepository.ObterUsuarioPorEmail(email);
+            var usuario = await _usuarioRepository.ObterUsuarioPorEmail(email);
 
-            if (usuarioExiste == null)
+            if (usuario == null)
                 return NotFound("Não existe nenhum usuário cadastrado à esse e-mail!");
 
-            if (usuarioExiste.Email == email && usuarioExiste.Senha == Criptografia.GerarHash(senha))
-                return Ok();
+            if (usuario.Email == email && usuario.Senha == Criptografia.GerarHash(senha))
+            {
+                var token = await _tokenHandler.GerarToken(usuario);
+                return Ok(token);
+            }
 
             return BadRequest("Credenciais inválidas!");
         }
