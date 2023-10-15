@@ -35,7 +35,7 @@ namespace LocalidadesAPI.Controllers
                 Senha = Criptografia.GerarHash(senha)
             };
 
-            var retorno = await _usuarioRepository.Inserir(usuario);
+            var retorno = (int) await _usuarioRepository.Inserir(usuario, true);
 
             if (retorno == 0)
                 return StatusCode(500, "Erro ao cadastrar usuário!");

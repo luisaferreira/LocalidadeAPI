@@ -31,7 +31,7 @@ namespace LocalidadesAPI.Controllers
             if (localidadeExiste != null)
                 return BadRequest("Já existe uma localidade vinculada à esse código IBGE!");
 
-            var retorno = await _IBGERepository.Inserir(ibge);
+            var retorno = (int) await _IBGERepository.Inserir(ibge, false);
 
             if (retorno == 0)
                 return StatusCode(500, "Erro ao adicionar localidade!");
@@ -54,7 +54,7 @@ namespace LocalidadesAPI.Controllers
             if (!ValidacaoHelper.ValidarCodigoIBGE(codigoIBGE))
                 return BadRequest("O código IBGE é inválido!");
 
-            var localidade = await _IBGERepository.ObterPorCodigo(codigoIBGE);
+            var localidade = await _IBGERepository.ObterPorId(codigoIBGE);
 
             return StatusCode(200, localidade);
         }

@@ -10,9 +10,6 @@ namespace LocalidadesAPI.Repositories
         public UsuarioRepository(IConfiguration configuration) 
             : base(configuration) { }
 
-        public override async Task<int> Inserir(Usuario usuario) =>
-            (int)(await CustomRepository.InsertAsync(usuario, true));
-
         public async Task<Usuario> ObterUsuarioPorEmail(string email)
         {
             var parametros = new Dictionary<string, object>()
@@ -21,7 +18,7 @@ namespace LocalidadesAPI.Repositories
             };
 
             var sql = new StringBuilder();
-            sql.AppendLine("SELECT * FROM USUARIO");
+            sql.AppendLine("SELECT * FROM USUARIO (NOLOCK)");
             sql.AppendLine("WHERE EMAIL = @Email");
 
             var retorno = await CustomRepository.GetAsync(sql.ToString(), parametros);
